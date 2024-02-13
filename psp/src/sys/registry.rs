@@ -1,3 +1,4 @@
+#[cfg(feature = "sys-stubs")]
 use crate::eabi::i5;
 use core::ffi::c_void;
 

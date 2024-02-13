@@ -1,7 +1,6 @@
-use crate::{
-    eabi::{i5, i6, i7},
-    sys,
-};
+#[cfg(feature = "sys-stubs")]
+use crate::eabi::{i5, i6, i7};
+use crate::sys;
 use core::ffi::c_void;
 
 /// A data handle used for various functions.

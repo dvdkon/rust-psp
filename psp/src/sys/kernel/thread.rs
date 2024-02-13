@@ -7,6 +7,7 @@
 //! version of Puzzle Bobble.
 
 use super::SceUid;
+#[cfg(feature = "sys-stubs")]
 use crate::eabi::i6;
 use core::ffi::c_void;
 

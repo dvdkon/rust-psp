@@ -1,3 +1,4 @@
+#[cfg(feature = "sys-stubs")]
 use crate::eabi::{i5, i6};
 use core::ffi::c_void;
 
@@ -1442,6 +1443,37 @@ pub struct sockaddr {
     pub sa_data: [u8; 14],
 }
 
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct sockaddr_in {
+    /// Total length
+    pub sin_len: u8,
+    /// Address family (AF_INET)
+    pub sin_family: u8,
+	pub sin_port: u16,
+	pub sin_addr: in_addr,
+	pub sin_zeros: [u8; 8],
+}
+
+impl sockaddr_in {
+	pub fn new(addr: u32, port: u16) -> Self {
+		sockaddr_in {
+			sin_len: 16,
+			sin_family: 2,
+			sin_port: port,
+			sin_addr: in_addr { s_addr: addr },
+			sin_zeros: [0, 0, 0, 0, 0, 0, 0, 0],
+		}
+	}
+}
+
+impl Into<sockaddr> for sockaddr_in {
+    fn into(self) -> sockaddr {
+		unsafe { core::mem::transmute(self) }
+    }
+}
+
+
 psp_extern! {
     #![name = "sceNetInet"]
     #![flags = 0x0009]
@@ -2187,7 +2219,8 @@ psp_extern! {
 }
 
 #[repr(C)]
-pub struct in_addr(pub u32);
+#[derive(Copy, Clone)]
+pub struct in_addr { pub s_addr: u32 }
 
 psp_extern! {
     #![name = "sceNetResolver"]

@@ -1,4 +1,5 @@
 #[no_mangle]
+#[cfg(feature = "vfpu")]
 pub unsafe extern "C" fn fminf(x: f32, y: f32) -> f32 {
     let out: f32;
     if x.is_nan() && !y.is_nan() {
@@ -29,6 +30,7 @@ pub unsafe extern "C" fn fminf(x: f32, y: f32) -> f32 {
 }
 
 #[no_mangle]
+#[cfg(feature = "vfpu")]
 pub unsafe extern "C" fn fmaxf(x: f32, y: f32) -> f32 {
     let out: f32;
     if x.is_nan() && !y.is_nan() {
@@ -59,6 +61,7 @@ pub unsafe extern "C" fn fmaxf(x: f32, y: f32) -> f32 {
 }
 
 #[no_mangle]
+#[cfg(feature = "vfpu")]
 pub unsafe extern "C" fn cosf(scalar: f32) -> f32 {
     let out: f32;
     vfpu_asm! (
@@ -79,6 +82,7 @@ pub unsafe extern "C" fn cosf(scalar: f32) -> f32 {
 }
 
 #[no_mangle]
+#[cfg(feature = "vfpu")]
 pub unsafe extern "C" fn sinf(scalar: f32) -> f32 {
     let out: f32;
     vfpu_asm! (
@@ -98,6 +102,7 @@ pub unsafe extern "C" fn sinf(scalar: f32) -> f32 {
     out
 }
 // borrowed from https://github.com/samcrow/cmsis_dsp.rs/blob/master/src/libm_c.rs
+#[cfg(feature = "libm")]
 macro_rules! forward {
     // One argument, argument and return types are the same
     { $( $name:ident($value_type:ty) ,)+ } => {
@@ -131,6 +136,7 @@ macro_rules! forward {
 }
 
 // One-argument functions
+#[cfg(feature = "libm")]
 forward! {
     fabsf(f32),
     fabs(f64),
@@ -192,6 +198,7 @@ forward! {
 }
 
 // Two-argument functions
+#[cfg(feature = "libm")]
 forward! {
     fmod(f64, f64) -> f64,
     fmodf(f32, f32) -> f32,
@@ -210,6 +217,7 @@ forward! {
 }
 
 // Three-argument functions
+#[cfg(feature = "libm")]
 forward! {
     fma(f64, f64, f64) -> f64,
     fmaf(f32, f32, f32) -> f32,

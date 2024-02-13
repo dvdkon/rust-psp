@@ -1,8 +1,6 @@
-use num_enum::TryFromPrimitive;
-
 /// PSP Time structure
 #[repr(C)]
-#[derive(Debug, Copy, Clone, Default)]
+#[derive(Debug, Copy, Clone, Default, Eq, PartialEq, Hash)]
 pub struct ScePspDateTime {
     pub year: u16,
     pub month: u16,
@@ -15,7 +13,8 @@ pub struct ScePspDateTime {
 
 /// Errors which may be returned from `sceRtc*` functions.
 #[repr(i32)]
-#[derive(Eq, PartialEq, TryFromPrimitive)]
+#[derive(Eq, PartialEq)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum RtcCheckValidError {
     InvalidYear = -1,
     InvalidMonth = -2,

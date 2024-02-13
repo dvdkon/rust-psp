@@ -15,8 +15,7 @@
     lang_items
 )]
 // For unwinding support
-#![feature(std_internals, panic_info_message, panic_internals, c_unwind)]
-#![cfg_attr(not(feature = "stub-only"), feature(panic_unwind))]
+#![cfg_attr(feature = "panic", feature(std_internals, panic_info_message, panic_internals, panic_unwind, c_unwind))]
 #![cfg_attr(feature = "std", feature(psp_std))]
 // For the `const_generics` feature.
 #![allow(incomplete_features)]
@@ -24,70 +23,56 @@
 
 #[macro_use]
 extern crate paste;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 extern crate alloc;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "panic")]
 extern crate panic_unwind;
 
 #[macro_use]
 #[doc(hidden)]
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 pub mod debug;
 
 #[macro_use]
+#[cfg(feature = "vfpu")]
 mod vfpu;
+#[cfg(feature = "sys-stubs")]
 mod eabi;
 pub mod math;
 pub mod sys;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 pub mod test_runner;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 pub mod vram_alloc;
 
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 mod alloc_impl;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "panic")]
 pub mod panic;
 
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 mod screenshot;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 pub use screenshot::*;
 
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 mod benchmark;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 pub use benchmark::*;
 
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 mod constants;
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 pub use constants::*;
 
 #[doc(hidden)]
+#[cfg(feature = "vfpu")]
 pub use unstringify::unstringify;
-
-#[cfg(not(feature = "std"))]
-#[cfg(feature = "stub-only")]
-#[panic_handler]
-fn panic(_: &core::panic::PanicInfo) -> ! {
-    loop {
-        core::hint::spin_loop()
-    }
-}
-
-#[cfg(not(feature = "std"))]
-#[no_mangle]
-extern "C" fn __rust_foreign_exception() -> ! {
-    loop {
-        core::hint::spin_loop()
-    }
-}
 
 #[cfg(feature = "std")]
 pub use std::panic::catch_unwind;
 
-#[cfg(all(not(feature = "std"), not(feature = "stub-only")))]
+#[cfg(all(not(feature = "std"), feature = "panic"))]
 pub use panic::catch_unwind;
 
 #[cfg(feature = "embedded-graphics")]
@@ -97,7 +82,7 @@ pub mod embedded_graphics;
 #[derive(Copy, Clone)]
 pub struct Align16<T>(pub T);
 
-#[cfg(all(target_os = "psp", not(feature = "stub-only")))]
+#[cfg(all(target_os = "psp", feature = "extras"))]
 core::arch::global_asm!(
     r#"
         .section .lib.ent.top, "a", @progbits
@@ -267,6 +252,7 @@ macro_rules! module {
 ///
 /// This API does not have destructor support yet. You can manually setup an
 /// exit callback if you need this, see the source code of this function.
+#[cfg(feature = "extras")]
 pub fn enable_home_button() {
     use core::{ffi::c_void, ptr};
     use sys::ThreadAttributes;

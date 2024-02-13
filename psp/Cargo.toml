@@ -12,27 +12,31 @@ authors = [
 edition = "2018"
 build = "build.rs"
 
-[lib]
-crate-type = ["lib", "staticlib"]
-
 [features]
-default = []
+default = ["vfpu", "libm", "sys-stubs", "extras", "num_enum", "panic"]
+vfpu = ["unstringify"]
+# Implement stubs for PSP APIs
+# Exactly one instance of psp in a given binary needs to have this enabled,
+# since it creates global symbols.
+sys-stubs = []
+# Also provide code other than PSP API declarations
+extras = []
+num_enum = ["dep:num_enum", "num_enum_derive"]
+panic = []
 std = []
-# Compile this library as a stub provider. Useful to compile this as a static
-# library for other projects.
-stub-only = []
+
+# Only used by std itself
+rustc-dep-of-std = ["core", "compiler_builtins", "bitflags/rustc-dep-of-std", "cfg-if/rustc-dep-of-std"]
 
 [dependencies]
-paste = "1.0.1"
-bitflags = "1.2.1"
-libm = "0.2.1"
+paste = "1.0.14"
+bitflags = "2.4.2"
+cfg-if = "1.0"
+libm = { version = "0.2.1", optional = true }
 embedded-graphics = { version = "0.7.1", optional = true, features = ["fixed_point"] }
-unstringify = "0.1.4"
+unstringify = { version = "0.1.4", optional = true }
+num_enum = { version = "0.7.2", optional = true, default-features = false }
+num_enum_derive = { version = "0.7.2", optional = true, default-features = false }
 
-[dependencies.num_enum]
-version = "0.5.0"
-default-features = false
-
-[dependencies.num_enum_derive]
-version = "0.5.0"
-default-features = false
+core = { version = "1.0.0", optional = true, package = "rustc-std-workspace-core" }
+compiler_builtins = { version = "0.1.2", optional = true }

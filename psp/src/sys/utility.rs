@@ -1,5 +1,4 @@
 use core::ffi::c_void;
-use num_enum::TryFromPrimitive;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -49,7 +48,8 @@ pub enum UtilityDialogButtonAccept {
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 /// Return-values for the various `sceUtility***GetStatus()` functions, when they don't return an error.
 ///
 /// # Example
@@ -123,7 +123,8 @@ pub enum SceUtilityOskResult {
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum SystemParamLanguage {
     Japanese,
     English,
@@ -159,7 +160,8 @@ pub enum SystemParamId {
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum SystemParamAdhocChannel {
     ChannelAutomatic = 0,
     Channel1 = 1,
@@ -168,14 +170,16 @@ pub enum SystemParamAdhocChannel {
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum SystemParamWlanPowerSaveState {
     Off,
     On,
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum SystemParamDateFormat {
     YYYYMMDD,
     MMDDYYYY,
@@ -183,14 +187,16 @@ pub enum SystemParamDateFormat {
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum SystemParamTimeFormat {
     Hour24,
     Hour12,
 }
 
 #[repr(u32)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = "num_enum", derive(num_enum::TryFromPrimitive))]
 pub enum SystemParamDaylightSavings {
     Std,
     Dst,
@@ -318,6 +324,7 @@ pub enum UtilityNetconfAction {
 
 bitflags::bitflags! {
     #[repr(transparent)]
+	#[derive(Copy, Clone)]
     pub struct UtilityMsgDialogOption: i32 {
         /// Error message (why two flags?)
         const ERROR = 0;
@@ -643,6 +650,7 @@ pub enum UtilityHtmlViewerDisconnectMode {
 
 bitflags::bitflags! {
     #[repr(C)]
+	#[derive(Copy, Clone, Debug)]
     pub struct UtilityHtmlViewerOption: u32 {
         /// Open SCE net start page
     const OPEN_SCE_START_PAGE  = 0x000001;
