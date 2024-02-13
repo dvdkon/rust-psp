@@ -233,7 +233,6 @@ unsafe extern "C" fn rust_eh_personality() {}
 /// These symbols and functions should not actually be used. `libunwind`,
 /// however, requires them to be present so that it can link.
 // TODO: Patch these out of libunwind instead.
-#[cfg(all(target_os = "psp", not(feature = "stub-only")))]
 mod libunwind_shims {
     #[no_mangle]
     unsafe extern "C" fn fprintf(_stream: *const u8, _format: *const u8, ...) -> isize {

@@ -519,7 +519,7 @@ pub enum Interrupt {
     Interrupt = 66,
 }
 
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 impl fmt::Display for Interrupt {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         core::write!(

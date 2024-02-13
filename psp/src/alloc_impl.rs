@@ -61,7 +61,7 @@ fn aeh(_: Layout) -> ! {
 }
 
 #[no_mangle]
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 unsafe extern "C" fn memset(ptr: *mut u8, value: u32, num: usize) -> *mut u8 {
     let mut i = 0;
 
@@ -74,7 +74,7 @@ unsafe extern "C" fn memset(ptr: *mut u8, value: u32, num: usize) -> *mut u8 {
 }
 
 #[no_mangle]
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 unsafe extern "C" fn memcpy(dst: *mut u8, src: *const u8, num: isize) -> *mut u8 {
     let mut i = 0;
 
@@ -87,7 +87,7 @@ unsafe extern "C" fn memcpy(dst: *mut u8, src: *const u8, num: isize) -> *mut u8
 }
 
 #[no_mangle]
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 unsafe extern "C" fn memcmp(ptr1: *mut u8, ptr2: *mut u8, num: usize) -> i32 {
     let mut i = 0;
 
@@ -107,7 +107,7 @@ unsafe extern "C" fn memcmp(ptr1: *mut u8, ptr2: *mut u8, num: usize) -> i32 {
 }
 
 #[no_mangle]
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 unsafe extern "C" fn memmove(dst: *mut u8, src: *mut u8, num: isize) -> *mut u8 {
     if dst < src {
         let mut i = 0;
@@ -129,7 +129,7 @@ unsafe extern "C" fn memmove(dst: *mut u8, src: *mut u8, num: isize) -> *mut u8 
 }
 
 #[no_mangle]
-#[cfg(not(feature = "stub-only"))]
+#[cfg(feature = "extras")]
 unsafe extern "C" fn strlen(s: *mut u8) -> usize {
     let mut len = 0;
 
