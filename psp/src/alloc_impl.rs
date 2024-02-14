@@ -3,8 +3,11 @@ use alloc::alloc::{GlobalAlloc, Layout};
 use core::{mem, ptr};
 
 /// An allocator that hooks directly into the PSP OS memory allocator.
+/// Already contained in std
+#[cfg(not(feature = "std"))]
 struct SystemAlloc;
 
+#[cfg(not(feature = "std"))]
 unsafe impl GlobalAlloc for SystemAlloc {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
         let size = layout.size()
@@ -49,6 +52,7 @@ unsafe impl GlobalAlloc for SystemAlloc {
     }
 }
 
+#[cfg(not(feature = "std"))]
 #[global_allocator]
 static ALLOC: SystemAlloc = SystemAlloc;
 
