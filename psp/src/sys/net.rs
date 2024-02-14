@@ -1527,7 +1527,7 @@ psp_extern! {
         buf: *mut c_void,
         len: usize,
         flags: i32,
-    ) -> usize;
+    ) -> i32;
 
     #[psp(0xC91142E4, i6)]
     pub fn sceNetInetRecvfrom(
